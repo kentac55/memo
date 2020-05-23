@@ -1,3 +1,5 @@
+mdx対応して日付フォーマット変えちゃった(markdownは読めなくなった😇)
+
 # memo
 
 Memo Life For You
@@ -132,7 +134,7 @@ categories: [{{_categories_}}]
 
 ## Extend With Plugin Commands
 
-You can extend memo with custom commands. 
+You can extend memo with custom commands.
 Place an executable file in your `pluginsdir`, memo can use it as a subcommand.
 For example, If you place `foo` file in your `pluginsdir`, you can run it by `memo foo`.
 

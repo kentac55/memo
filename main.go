@@ -34,7 +34,7 @@ import (
 
 const (
 	name     = "memo"
-	version  = "0.0.13"
+	version  = "0.0.13-modk"
 	revision = "HEAD"
 )
 
@@ -265,7 +265,7 @@ func msg(err error) int {
 func filterMarkdown(files []string) []string {
 	var newfiles []string
 	for _, file := range files {
-		if strings.HasSuffix(file, ".md") {
+		if strings.HasSuffix(file, ".mdx") {
 			newfiles = append(newfiles, file)
 		}
 	}
@@ -475,7 +475,7 @@ func cmdNew(c *cli.Context) error {
 	now := time.Now()
 	if c.Args().Present() {
 		title = c.Args().First()
-		file = now.Format("2006-01-02-") + escape(title) + ".md"
+		file = now.Format("20060102-") + escape(title) + ".mdx"
 	} else {
 		fmt.Print("Title: ")
 		scanner := bufio.NewScanner(os.Stdin)
@@ -487,11 +487,11 @@ func cmdNew(c *cli.Context) error {
 		}
 		title = scanner.Text()
 		if title == "" {
-			title = now.Format("2006-01-02")
-			file = title + ".md"
+			title = now.Format("20060102")
+			file = title + ".mdx"
 
 		} else {
-			file = now.Format("2006-01-02-") + escape(title) + ".md"
+			file = now.Format("20060102-") + escape(title) + ".mdx"
 		}
 	}
 	file = filepath.Join(cfg.MemoDir, file)
@@ -511,7 +511,7 @@ func cmdNew(c *cli.Context) error {
 		}
 		tmplString = filterTmpl(string(b))
 	}
-	t := template.Must(template.New("memo").Parse(tmplString))
+	t := tt.Must(tt.New("memo").Parse(tmplString))
 
 	f, err := os.Create(file)
 	if err != nil {
@@ -521,7 +521,7 @@ func cmdNew(c *cli.Context) error {
 	err = t.Execute(f, struct {
 		Title, Date, Tags, Categories string
 	}{
-		title, now.Format("2006-01-02 15:04"), "", "",
+		title, now.Format(time.RFC3339Nano), "", "",
 	})
 	f.Close()
 	if err != nil {
